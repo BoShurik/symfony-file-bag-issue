@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/jquery.collection.js"></script>
+    <script type="text/javascript">
+        $('.js-collection').collection();
+    </script>
+{% endblock %}
+
+{% block collection_widget %}
+    {% if prototype is defined %}
+        {% set attr = attr|merge({'data-prototype': form_row(prototype)}) %}
+        {% set attr = attr|merge({'data-prototype-name': prototype.vars.name}) %}
+    {% endif %}
+    {% set attr = attr|merge({'data-allow-add': allow_add ? 1 : 0}) %}
+    {% set attr = attr|merge({'data-allow-remove': allow_delete ? 1 : 0 }) %}
+    {% set attr = attr|merge({'data-name-prefix': full_name}) %}
+    {{ block('form_widget') }}
+{% endblock collection_widget %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button>Submit</button>
+    {{ form_end(form) }}
+{% endblock %}
